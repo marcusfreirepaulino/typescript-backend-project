@@ -9,6 +9,7 @@ export class Database {
     private tables = ["usuario", "equipe"];
     constructor(){}
 
+
     //user/users
     public async getUsers(){
         try{
