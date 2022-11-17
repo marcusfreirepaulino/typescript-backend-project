@@ -7,7 +7,7 @@ const app = express();
 app.use('/get', () => {
     console.log("foi")
     const db = new Database();
-    db.get_user('mail@mail.com');
+    db.get_unic('mail@mail.com');
 })
 
 app.use('/', () => {

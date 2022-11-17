@@ -1,13 +1,14 @@
 // nivel para criação de rotas e direcionamento do tratamento
 import * as express from 'express';
+const { getUserMe, getUsers, getUserById, getTeams, getTeamById } = require ('../controller/users.ts');
 
 const router = express.Router();
 
-router.get("/users/");
-router.get("/users/me");
-router.get("/users/:user_id");
-router.get("/teams/");
-router.get("/teams/:team_id");
+router.get("/users/", getUsers);
+router.get("/users/me", getUserMe);
+router.get("/users/:user_id", getUserById);
+router.get("/teams/", getTeams);
+router.get("/teams/:team_id", getTeamById);
 
 router.post("/users/");
 router.post("/team/");

@@ -9,7 +9,7 @@ export class Database {
     constructor(){}
 
     // metodo para obter usuário do banco de dados a partir de email
-    /* async get_all(_email: string){
+    async get_all(_email: string){
         try{
             // seleciona senha de usuáro a partir de email
             const res = await orm.selectAll('users', ["username", "email"]);
@@ -92,7 +92,7 @@ export class Database {
             console.log(err)
             return {error: err, data: null};
         }
-    }*/
+    }
 
     async post_insert(_email: string){
         try{

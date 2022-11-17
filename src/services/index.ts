@@ -43,3 +43,116 @@ export const registerTeam = async (data: validator.Team) =>{
 
 
 }
+
+export const getUserMeService = async (id: string) =>{
+    try{
+        const db = new Database();
+        const data = await db.get_unic(id);
+        
+        if(!data.error){
+            throw {
+                status: 500
+            }
+        }
+        return data.data;
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+
+interface userType {
+    id: string,
+    is_admin: boolean
+};
+export const getUsersService = async (user: userType) =>{
+    try{
+        if (user.is_admin=true){
+            const db = new Database();
+            const data = await db.get_all(user.id);
+            
+            if(!data.error){
+                throw {
+                    status: 500
+                }
+            }   
+            return data.data;     
+        } else { return ("Acesso negado.")}
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+
+interface userTypeTwo {
+    id: string,
+    is_admin: boolean,
+    to_read: string
+};
+export const getUserByIdService = async (user: userTypeTwo) =>{
+    try{
+        if (user.is_admin=true){
+            const db = new Database();
+            const data = await db.get_unic(user.to_read);
+            
+            if(!data.error){
+                throw {
+                    status: 500
+                }
+            }  
+            return data.data;      
+        } else { return ("Acesso negado.")}
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+
+export const getTeamsService = async (user: userType) =>{
+    try{
+        if (user.is_admin=true){
+            const db = new Database();
+            const data = await db.get_all(user.id); //recebe usuarios, trocar depois
+            
+            if(!data.error){
+                throw {
+                    status: 500
+                }
+            } 
+            return data.data;       
+        } else { return ("Acesso negado.")}
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+
+export const getTeamByIdService = async (user: userTypeTwo) =>{
+    try{
+        if (user.is_admin=true){
+            const db = new Database();
+            const data = await db.get_unic(user.to_read); //pega tabela users, mudar
+            
+            if(!data.error){
+                throw {
+                    status: 500
+                }
+            }  
+            return data.data;      
+        } else { return ("Acesso negado.")}
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+//teste
