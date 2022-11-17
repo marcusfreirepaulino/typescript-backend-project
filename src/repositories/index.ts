@@ -35,9 +35,10 @@ export class Database {
             console.log(err)
             return {error: err, data: null};
         }
-    }*/
+    }
 
-     async post_user(_email: string | undefined){
+
+    async post_user(_email: string){
         try{
             // seleciona senha de usuáro a partir do id
             const res = await orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'is_admin', 'squad'], {id: '5dc35158-75c2-456f-a794-bb09d251ac7e', username: 'usuariotest', email: 'este@mail.com', password: '123', first_name: 'test', last_name: 'testes', is_admin: 'true', squad: 'a47ef7ee-b68c-4956-b073-69a946b4e32a'});
@@ -49,12 +50,12 @@ export class Database {
             console.log(err)
             return {error: err, data: null};
         }
-    } 
+  }
 
     async post_memberSquad(_squad: any){
         try{
             // seleciona senha de usuáro a partir do id
-            const res = await orm.insertMember('users', ['a48ef7ee-b68c-4956-b073-69a946b4e32a', 'e649f6ee-eb52-4647-96dd-4ebccfff5fcd']);
+            const res = await orm.updateMember('users', ['a48ef7ee-b68c-4956-b073-69a946b4e32a', 'e649f6ee-eb52-4647-96dd-4ebccfff5fcd']);
             if (res.err) throw res.err;
 
             console.log(res.data)
@@ -65,5 +66,45 @@ export class Database {
         }
     }
 
-}
+    async post_softDelete(_squad: any){
+        try{
+            // seleciona senha de usuáro a partir do id
+            const res = await orm.softDelete('5dc35158-75c2-456f-a794-bb09d251ac7e');
+            if (res.err) throw res.err;
 
+            console.log(res.data)
+            return {error: null, data: res.data};
+        }catch(err){
+            console.log(err)
+            return {error: err, data: null};
+        }
+    }
+
+    async post_deleteSquad(_squad: any){
+        try{
+            // seleciona senha de usuáro a partir do id
+            const res = await orm.delete('9dc35158-75c2-456f-a794-bb09d251ac7e');
+            if (res.err) throw res.err;
+
+            console.log(res.data)
+            return {error: null, data: res.data};
+        }catch(err){
+            console.log(err)
+            return {error: err, data: null};
+        }
+    }*/
+
+    async post_insert(_email: string){
+        try{
+            // seleciona senha de usuáro a partir do id
+            const res = await orm.update('users', ['5dc35158-75c2-456f-a794-bb09d251ac7e'], {username: 'aaaa', email: 'aaae@mail.com'});
+            if (res.err) throw res.err;
+
+            console.log(res.data)
+            return {error: null, data: res.data};
+        }catch(err){
+            console.log(err)
+            return {error: err, data: null};
+        }
+    }
+}
