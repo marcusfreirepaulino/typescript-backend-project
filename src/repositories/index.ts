@@ -37,7 +37,7 @@ export class Database {
         }
     }*/
 
-    /* async post_user(_email: string){
+     async post_user(_email: string | undefined){
         try{
             // seleciona senha de usuáro a partir do id
             const res = await orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'is_admin', 'squad'], {id: '5dc35158-75c2-456f-a794-bb09d251ac7e', username: 'usuariotest', email: 'este@mail.com', password: '123', first_name: 'test', last_name: 'testes', is_admin: 'true', squad: 'a47ef7ee-b68c-4956-b073-69a946b4e32a'});
@@ -49,7 +49,7 @@ export class Database {
             console.log(err)
             return {error: err, data: null};
         }
-    } */
+    } 
 
     async post_memberSquad(_squad: any){
         try{

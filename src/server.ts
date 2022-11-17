@@ -8,7 +8,7 @@ app.use('/get', () => {
     console.log("foi")
     const db = new Database();
     db.get_user('mail@mail.com');
-}
+})
 
 app.use('/', () => {
     console.log("foi")
