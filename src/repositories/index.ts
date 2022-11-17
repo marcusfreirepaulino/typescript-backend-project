@@ -37,6 +37,7 @@ export class Database {
         }
     }
 
+
     async post_user(_email: string){
         try{
             // seleciona senha de usuáro a partir do id
@@ -49,7 +50,7 @@ export class Database {
             console.log(err)
             return {error: err, data: null};
         }
-    }
+  }
 
     async post_memberSquad(_squad: any){
         try{
