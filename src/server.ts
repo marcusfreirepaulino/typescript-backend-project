@@ -12,8 +12,8 @@ app.use('/get', () => {
 
 app.use('/', () => {
     console.log("foi")
-    const db = new Database();
-    db.post_insert('mail@mail.com');
+    /* const db = new Database();
+    db.post_insert('mail@mail.com'); */
 })
 
 app.use(router);

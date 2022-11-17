@@ -50,11 +50,8 @@ export const getUserMeService = async (id: string) =>{
         const data = await db.get_unic(id);
         
         if(!data.error){
-            throw {
-                status: 500
-            }
+            return data.data;
         }
-        return data.data;
         
     }
     catch(err: any){
@@ -74,11 +71,8 @@ export const getUsersService = async (user: userType) =>{
             const data = await db.get_all(user.id);
             
             if(!data.error){
-                throw {
-                    status: 500
-                }
-            }   
-            return data.data;     
+                return data.data; 
+            }       
         } else { return ("Acesso negado.")}
         
     }
@@ -100,11 +94,8 @@ export const getUserByIdService = async (user: userTypeTwo) =>{
             const data = await db.get_unic(user.to_read);
             
             if(!data.error){
-                throw {
-                    status: 500
-                }
+                return data.data;      
             }  
-            return data.data;      
         } else { return ("Acesso negado.")}
         
     }
@@ -121,11 +112,8 @@ export const getTeamsService = async (user: userType) =>{
             const data = await db.get_all(user.id); //recebe usuarios, trocar depois
             
             if(!data.error){
-                throw {
-                    status: 500
-                }
-            } 
-            return data.data;       
+                return data.data;  
+            }      
         } else { return ("Acesso negado.")}
         
     }
@@ -142,11 +130,8 @@ export const getTeamByIdService = async (user: userTypeTwo) =>{
             const data = await db.get_unic(user.to_read); //pega tabela users, mudar
             
             if(!data.error){
-                throw {
-                    status: 500
-                }
-            }  
-            return data.data;      
+                return data.data; 
+            }       
         } else { return ("Acesso negado.")}
         
     }

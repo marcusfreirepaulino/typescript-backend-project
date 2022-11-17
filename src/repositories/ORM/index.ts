@@ -21,7 +21,7 @@ export class Postegres{
 
         const queryText = `SELECT ${cc} FROM ${table}`;
         const response = await this.pool.query(queryText);//resposta da query
-        return {err: null, data: response}; // objeto com erro ou resposta
+        return {err: null, data: response.rows}; // objeto com erro ou resposta
     };
 
     public async selectUnic(table : string, columns: Array<string> = [], options: object = {} ){
@@ -41,12 +41,11 @@ export class Postegres{
         for (const [p, val] of Object.entries(options)) {
             str += `${p}='${val}'`;
         }
-        console.log(str.toString());
         
         //SELECT ${cc} FROM table WHERE id = '38474'
         const queryText = `SELECT ${cc} FROM ${table} WHERE ${str}`;
         const response = await this.pool.query(queryText);//resposta da query
-        return {err: null, data: response}; // objeto com erro ou resposta
+        return {err: null, data: response.rows}; // objeto com erro ou resposta
     };
 
     public async insert(table : string, columns: Array<string> = [], options: object = {}){
