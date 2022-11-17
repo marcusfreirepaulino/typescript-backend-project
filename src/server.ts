@@ -12,7 +12,7 @@ const app = express();
 app.use('/', () => {
     console.log("foi")
     const db = new Database();
-    db.post_memberSquad('mail@mail.com');
+    db.post_insert('mail@mail.com');
 })
 
 
