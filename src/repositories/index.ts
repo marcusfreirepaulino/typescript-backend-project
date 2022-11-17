@@ -49,6 +49,7 @@ export class Database {
         }
     };
 
+
     public async insertMemberSquad(idUser: uuid, idSquad: uuid) : Promise<resp<any>> {
         try{
             if(!idUser) throw new Error("Insira inserir a id do user");
@@ -150,4 +151,5 @@ export class Database {
             return {error: err as Error, data: null};
         }
     }
+    
 }

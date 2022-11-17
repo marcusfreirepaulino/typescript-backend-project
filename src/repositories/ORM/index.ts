@@ -36,12 +36,12 @@ export class Postegres{
         for (const [p, val] of Object.entries(options)) {
             str += `${p}='${val}'`;
         }
-        console.log(str.toString());
         
         //SELECT ${cc} FROM table WHERE id = '38474'
         const queryText = `SELECT ${cc} FROM ${table} WHERE ${str}`;
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
+
     };
 
     public async insert(table : string, columns: columns, options: options) : Promise<resp<any>>{
