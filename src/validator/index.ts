@@ -45,4 +45,21 @@ class NameValidator {
     }
 }
 
-export {EmailValidator, PasswordValidator, NameValidator};
+interface User {
+    id?: string,
+    username?: string;
+    squad?: string;
+    email?: string;
+    password?: string;
+    first_name?: string;
+    last_name?: string;
+    is_admin?: boolean;
+}
+
+interface Team{
+    id: string;
+    name: string;
+    leader: string;
+}
+
+export {EmailValidator, PasswordValidator, NameValidator, Team, User };
