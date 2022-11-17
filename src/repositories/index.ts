@@ -1,108 +1,154 @@
 // Arquivo para acesso direto ao banco de dados
 import { Postegres } from "./ORM/index";
-
-const orm = new Postegres;
+import { options, uuid, columns, Isquad, Iuser, resp } from "../interfaces/index";
+import { isBooleanObject } from "util/types";
 
 //Classe para construir os acessos ao banco
 export class Database {
     private orm = new Postegres;
+    private tables = ["usuario", "equipe"];
     constructor(){}
 
-    // metodo para obter usuário do banco de dados a partir de email
-    async get_all(_email: string){
+    //user/users
+    public async getUsers(){
         try{
-            // seleciona senha de usuáro a partir de email
-            const res = await orm.selectAll('users', ['username', 'email']);
+            const res = await this.orm.selectAll('users', ['*']);
             if (res.err) throw res.err;
-            
             return {error: null, data: res.data};
         }catch(err){
-            console.log(err)
-            return {error: err, data: null};
+            return {error: err as Error, data: null};
         }
-    } 
+    }
+
+    public async getUsersID(_id: uuid){
+        try{
+            if(!_id) throw new Error("é necessário um id");
+            const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], {id: _id});
+            if (res.err) throw res.err;
+            return {error: null, data: res.data};
+        }catch(err){
+            return {error: err as Error, data: null};
+        }
+    }
     
-    async get_unic(_email: string){
+    // public async insertUser(id: uuid, username: string, email: string, password: string, first_name: string, last_name: string, squad?: string, is_admin: boolean = false){
+    public async insertUser(_user : Iuser){
         try{
-            // seleciona senha de usuáro a partir do id
-            const res = await orm.selectUnic('users', ["username", "email", "password"], {id: 'a47ef7ee-b68c-4956-b073-69a946b4e32a'});
-            if (res.err) throw res.err;
+            if(!_user.id) throw new Error("Insira um id!");
+            if(!_user.username) throw new Error("Insira um username!");
+            if(!_user.last_name && !_user.first_name) throw new Error("Insira nome e sobrenome!");
+            if(!_user.email) throw new Error("Insira um e-mail!");
+            if(!_user.password) throw new Error("Insira uma senha!");
+            if(!_user.is_admin) throw new Error("Informe se o usuário inserido é administrador!");
 
+            const res = await this.orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin', 'inactive'], _user);
+            if (res.err) throw res.err;
             return {error: null, data: res.data};
         }catch(err){
-            console.log(err)
-            return {error: err, data: null};
+            return {error: err as Error, data: null};
+        }
+    };
+
+
+    public async insertMemberSquad(idUser: uuid, idSquad: uuid) : Promise<resp<any>> {
+        try{
+            if(!idUser) throw new Error("Insira inserir a id do user");
+            if(!idSquad) throw new Error("Insira inserir a id da equipe");
+
+            const res = await this.orm.updateMember('users', [idUser, idSquad]);
+            if (res.err) throw res.err;
+            return {err: null, data: res.data};
+        }catch(err){
+            return {err: err as Error, data: null};
+        }
+    };
+    
+    // public async updateUser(id?: uuid, username?: string, email?: string, password?: string, first_name?: string, last_name?: string, squad?: string, is_admin: boolean = false){
+    public async updateUser(_user: Iuser){
+
+        try{
+            const res = await this.orm.update('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin', 'inactive'], _user);
+            if (res.err) throw res.err;
+            return {error: null, data: res.data};
+        }catch(err){
+            return {error: err as Error, data: null};
         }
     }
 
-
-    async post_user(_email?: string){
+    public async deletUser(_id: uuid){
         try{
-            // seleciona senha de usuáro a partir do id
-            const res = await orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'is_admin', 'squad'], {id: '5dc35158-75c2-456f-a794-bb09d251ac7e', username: 'usuariotest', email: 'este@mail.com', password: '123', first_name: 'test', last_name: 'testes', is_admin: 'true', squad: 'a47ef7ee-b68c-4956-b073-69a946b4e32a'});
+            const res = await this.orm.softDelete(_id);
             if (res.err) throw res.err;
-
-            console.log(res.data)
             return {error: null, data: res.data};
         }catch(err){
-            console.log(err)
-            return {error: err, data: null};
-        }
-  }
-
-    async post_memberSquad(_squad: any){
-        try{
-            // seleciona senha de usuáro a partir do id
-            const res = await orm.updateMember('users', ['a48ef7ee-b68c-4956-b073-69a946b4e32a', 'e649f6ee-eb52-4647-96dd-4ebccfff5fcd']);
-            if (res.err) throw res.err;
-
-            console.log(res.data)
-            return {error: null, data: res.data};
-        }catch(err){
-            console.log(err)
-            return {error: err, data: null};
+            return {error: err as Error, data: null};
         }
     }
 
-    async post_softDelete(_squad: any){
+    public async deletUserSquad(_id: uuid){
         try{
-            // seleciona senha de usuáro a partir do id
-            const res = await orm.softDelete('5dc35158-75c2-456f-a794-bb09d251ac7e');
+            const res = await this.orm.deleteMemberSquad(_id);
             if (res.err) throw res.err;
-
-            console.log(res.data)
             return {error: null, data: res.data};
         }catch(err){
-            console.log(err)
-            return {error: err, data: null};
+            return {error: err as Error, data: null};
         }
     }
 
-    async post_deleteSquad(_squad: any){
+    //Squad/Squads
+    public async getSquads() {
         try{
-            // seleciona senha de usuáro a partir do id
-            const res = await orm.delete('9dc35158-75c2-456f-a794-bb09d251ac7e');
+            const res = await this.orm.selectAll('Isquad', ['id', 'name', 'leader']);
             if (res.err) throw res.err;
-
-            console.log(res.data)
             return {error: null, data: res.data};
         }catch(err){
-            console.log(err)
-            return {error: err, data: null};
+            return {error: err as Error, data: null};
         }
     }
 
-    async post_insert(_email: string){
+    public async getSpecificSquad(id: uuid) {
         try{
-            // seleciona senha de usuáro a partir do id
-            const res = await orm.update('users', ['5dc35158-75c2-456f-a794-bb09d251ac7e'], {username: 'aaaa', email: 'aaae@mail.com'});
+            if(!id) throw new Error("é necessário um id");
+            const res = await this.orm.selectUnic('Isquad', ['id', 'name', 'leader'], {id: id});
             if (res.err) throw res.err;
-
-            console.log(res.data)
             return {error: null, data: res.data};
         }catch(err){
-            console.log(err)
-            return {error: err, data: null};
+            return {error: err as Error, data: null};
+        }
+    }
+
+    // public async insertSquad(id: uuid, name: string, leader: uuid){
+    public async insertSquad(_squad: Isquad){
+        try{
+            if(!_squad.id) throw new Error("Insira um id válido!");
+            if(!_squad.name) throw new Error("Insira um name válido!");
+            if(!_squad.leader) throw new Error("Insira um lider para a equipe!");
+
+            const res = await this.orm.insert('squads', ['id', 'name', 'leader'], _squad);
+            if (res.err) throw res.err;
+            return {error: null, data: res.data};
+        }catch(err){
+            return {error: err as Error, data: null};
+        }
+    }
+
+    public async updateSquad(_squad : Isquad){
+        try{
+            const res = await this.orm.insert('squads', ['id', 'name', 'leader'], _squad);
+            if (res.err) throw res.err;
+            return {error: null, data: res.data};
+        }catch(err){
+            return {error: err as Error, data: null};
+        }
+    }
+
+    public async deletSquad(_id: uuid){
+        try{
+            const res = await this.orm.delete(_id);
+            if (res.err) throw res.err;
+            return {error: null, data: res.data};
+        }catch(err){
+            return {error: err as Error, data: null};
         }
     }
     

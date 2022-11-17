@@ -1,12 +1,14 @@
 // Arquivo para funções gerais de acesso ao PostegreSQL
 import { Pool } from "pg";
+import { options, uuid, columns, Isquad, Iuser, resp } from '../../interfaces/index'
+
 const poolConfig = {
     user: 'postgres',
     host: 'localhost',
     database: 'typescript-backend-project',
     password: 'qazwsxedc',
     port: 5432
-};
+}; 
 export class Postegres{
     private pool : Pool;
     constructor(){
@@ -14,25 +16,18 @@ export class Postegres{
     }
 
     // métodos para conecção com banco de dados
-    public async selectAll(table : string, columns: Array<string> = []){
-        
-        let cc: Array<string> = columns;
+    //seleciona deteminados campos de uma table => columns -> ['username', 'email', ...]
+    public async selectAll(table : string, columns: columns) : Promise<resp<any>>{
+
+        let cc: columns = columns;
         cc.toString();
 
         const queryText = `SELECT ${cc} FROM ${table}`;
-        const response = await this.pool.query(queryText);//resposta da query
-        return {err: null, data: response.rows}; // objeto com erro ou resposta
+        const response : any = await this.pool.query(queryText);//resposta da query
+        return {err: null, data: response}; // objeto com erro ou resposta
     };
 
-    public async selectUnic(table : string, columns: Array<string> = [], options: object = {} ){
-        //columns.length -> retorno [username, email, firts_name, ...] => 'username, email, firts_name, ...'
-        //table -> tabela a ser consultada 'users'
-        //options -> parametros passados para a consulta { id: 1234, name: 'dfgh' } => 'id = 1234, name = asd'
-        //Formar:
-        //values = ['username, email, firts_name, ...', 'users', 'id = 1234']
-        //$1 => 'username, email, firts_name, ...'
-        //$2 => 'users'
-        //$3 => 'id=1234, name = wew'
+    public async selectUnic(table : string, columns: columns, options: options ): Promise<resp<any>>{
 
         let cc: Array<string> = columns;
         cc.toString();
@@ -44,11 +39,12 @@ export class Postegres{
         
         //SELECT ${cc} FROM table WHERE id = '38474'
         const queryText = `SELECT ${cc} FROM ${table} WHERE ${str}`;
-        const response = await this.pool.query(queryText);//resposta da query
-        return {err: null, data: response.rows}; // objeto com erro ou resposta
+        const response : any = await this.pool.query(queryText);//resposta da query
+        return {err: null, data: response}; // objeto com erro ou resposta
+
     };
 
-    public async insert(table : string, columns: Array<string> = [], options: object = {}){
+    public async insert(table : string, columns: columns, options: options) : Promise<resp<any>>{
         
         let cc: Array<string> = columns;
         cc.toString();
@@ -65,18 +61,18 @@ export class Postegres{
         const queryText = `INSERT INTO ${table} (${cc}) VALUES (${op2})`;
 
         console.log(queryText);
-        const response = await this.pool.query(queryText);//resposta da query
+        const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
 
-    public async updateMember(table : string, columns: Array<string> = []){
+    public async updateMember(table : string, columns: columns) : Promise<resp<any>> {
         const queryText = `UPDATE ${table} SET squad = $1 WHERE id = $2;`;
 
-        const response = await this.pool.query(queryText, columns);//resposta da query
+        const response : any = await this.pool.query(queryText, columns);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
 
-    public async update(table : string, options: Array<string> = [], columns: object = {}){
+    public async update(table : string, options: columns, columns: options) : Promise<resp<any>>{
         //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fkffk', username: 'ddhh'}
         let str = '';
         for (const [p, val] of Object.entries(columns)) { // { id: 11223, username: 'teste'} => 'id=11223,username:teste,'
@@ -89,51 +85,34 @@ export class Postegres{
         cc.toString();
         console.log(cc);
 
-        //UPDATE [ tabela ]SET [ coluna_1 ] = [ novo_valor_1 ], [ coluna_2 ] = [ novo_valor_2 ] WHERE [ condicao-de-busca ]
         const queryText = `UPDATE ${table} SET ${op2}, updated_at = now() WHERE id = '${cc}'`;
         console.log(queryText);
-        const response = await this.pool.query(queryText);//resposta da query
+        const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
 
-    public async deleteMemberSquad(table : string, options: Array<string> = [], columns: object = {}){
-        //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fkffk', username: 'ddhh'}
-        let str = '';
-        for (const [p, val] of Object.entries(columns)) { // { id: 11223, username: 'teste'} => 'id=11223,username:teste,'
-            str += `${p}=${val},`;
-        }
-        const op2 = str.substring(0, str.length - 1);
-        console.log(op2);
-
-        let cc: Array<string> = options;
-        cc.toString();
-        console.log(cc);
-
-        //UPDATE [ tabela ]SET [ coluna_1 ] = [ novo_valor_1 ], [ coluna_2 ] = [ novo_valor_2 ] WHERE [ condicao-de-busca ]
-        const queryText = `UPDATE ${table} SET ${op2} WHERE id = '${cc}'`;
+    public async deleteMemberSquad(_id : uuid) : Promise<resp<any>>{
+        const queryText = `UPDATE users SET squad = NULL, updated_at = now() WHERE id = '${_id}'`;
         console.log(queryText);
-        const response = await this.pool.query(queryText);//resposta da query
+        const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
 
-    public async delete(id: string){
-        
+    public async delete(id: string) : Promise<resp<any>>{
        // DELETE FROM [ tabela ] WHERE [ condicao_de_busca ]; => {'}
        // CRIAR MAIS UMA COLUNA => DELETE: TRUE OU FALSE & deleted_at: now() -> registra a data de delete
 
         const queryText = `DELETE FROM squad WHERE id = '${id}'`;
-        const response = await this.pool.query(queryText);//resposta da query
+        const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
 
-    public async softDelete(id: string){
+    public async softDelete(id: string) : Promise<resp<any>>{
         // DELETE FROM [ tabela ] WHERE [ condicao_de_busca ]; => {'}
         // CRIAR MAIS UMA COLUNA => DELETE: TRUE OU FALSE & deleted_at: now() -> registra a data de delete
- 
-        //
 
         const queryText = `UPDATE users SET inactive = true, deleted_at = now() where id = '${id}'`;
-        const response = await this.pool.query(queryText);//resposta da query
+        const response : any = await this.pool.query(queryText);//resposta da query
          return {err: null, data: response}; // objeto com erro ou resposta
     }
 
