@@ -39,7 +39,7 @@ export async function getUsers(req: Request, res: Response) {
         id: userId,
         is_admin: ifAdmin
     }
-
+    
     try {
         const data = await getUsersService(user);
         res.status(202).send(data);
