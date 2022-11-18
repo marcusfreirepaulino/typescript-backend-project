@@ -3,26 +3,26 @@ type uuid = string;
 type columns = Array<string>
 
 interface Iuser {
-	id? : uuid,
-	email? : string,
-	username? : string,
-	first_name? : string,
-	last_name? : string,
-	password? : string,
-	squad? : uuid | null,
-	is_admin? : boolean, 
-	inactive? : boolean,
+	id?: uuid,
+	email?: string,
+	username?: string,
+	first_name?: string,
+	last_name?: string,
+	password?: string,
+	squad?: uuid | null,
+	is_admin?: boolean,
+	inactive?: boolean,
 }
 
 interface Isquad {
-	id? : uuid,
-	name? : string,
-	leader? : uuid
+	id?: uuid,
+	name?: string,
+	leader?: uuid
 }
 
 interface resp<G> {
-    err?: Error | null,
-    data: G | null 
+	err?: Error | null,
+	data: G | null
 };
 
 

@@ -7,6 +7,7 @@ dotenv.config();
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid"
+import { Console } from "console";
 
 const secret: string = '222334';
 
@@ -18,11 +19,13 @@ export const registerUser = async (data: Iuser) => {
         new validator.NameValidator(data.first_name);
         new validator.NameValidator(data.last_name);
 
+        const encryptedPasswd: string = await bcrypt.hash(data.password as string, 10);
+
         const dataUser: Iuser = {
             id: uuid(),
             username: data.username,
             email: data.email,
-            password: data.password,
+            password: encryptedPasswd,
             first_name: data.first_name,
             last_name: data.last_name,
             inactive: false,
@@ -56,13 +59,13 @@ export const loginUser = async (data: Iuser) => {
         const response: resp<[Iuser]> = await db.getLogin(emailUser);
 
         if (!response.err) {
-            // console.log("51");
+            console.log("62", response)
             const user = response.data![0];
-            // console.log("53", user.password);
+
             const compare = await bcrypt.compare(password as string, user.password as string)
 
             if (!compare) throw new Error;
-            // console.log("57");
+
             const token = jwt.sign(
                 {
                     id: user.id,
@@ -161,7 +164,7 @@ export const getTeamsService = async () => {
     try {
 
         const db = new Database();
-        const data = await db.getSquads();     
+        const data = await db.getSquads();
         if (!data.error) {
             return data.data;
         }
@@ -208,12 +211,12 @@ export const patchUserService = async (user: Iuser, id: string) => {
 
 export const patchTeamService = async (teamId: string, teamUpdate: Isquad) => {
     try {
-            const db = new Database();
-            const data = await db.updateSquad(teamId, teamUpdate);
+        const db = new Database();
+        const data = await db.updateSquad(teamId, teamUpdate);
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -224,12 +227,12 @@ export const patchTeamService = async (teamId: string, teamUpdate: Isquad) => {
 
 export const patchMemberService = async (teamId: string, memberUpdate: string) => {
     try {
-            const db = new Database();
-            const data = await db.insertMemberSquad(teamId, memberUpdate) //recebe usuarios, trocar depois
+        const db = new Database();
+        const data = await db.insertMemberSquad(teamId, memberUpdate) //recebe usuarios, trocar depois
 
-            if (!data.err) {
-                return data.data;
-            }
+        if (!data.err) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -240,12 +243,12 @@ export const patchMemberService = async (teamId: string, memberUpdate: string) =
 
 export const deleteMemberSquadService = async (memberId: string) => {
     try {
-            const db = new Database();
-            const data = await db.deletUserSquad(memberId)
+        const db = new Database();
+        const data = await db.deletUserSquad(memberId)
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -256,12 +259,12 @@ export const deleteMemberSquadService = async (memberId: string) => {
 
 export const deleteUserService = async (userId: string) => {
     try {
-            const db = new Database();
-            const data = await db.deletUser(userId)
+        const db = new Database();
+        const data = await db.deletUser(userId)
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -272,12 +275,12 @@ export const deleteUserService = async (userId: string) => {
 
 export const deleteSquadService = async (id: string) => {
     try {
-            const db = new Database();
-            const data = await db.deletSquad(id)
+        const db = new Database();
+        const data = await db.deletSquad(id)
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {

@@ -2,12 +2,10 @@
 import { create } from 'domain';
 import * as express from 'express';
 import { getUserLogin, getUserMe, getUsers, getUserById, getTeams, getTeamById, createUser, createTeam, patchUser, patchTeam, patchMember, deleteMemberSquad, deleteUser, deleteSquad } from '../controller/users';
+import { authAdmin, authAdminLider, authLog, authUser } from '../middleware/index';
 
 const router = express.Router();
 router.use(express.json());
-// router.post('/login', login);
-
-import { authAdmin, authAdminLider, authLog, authUser } from '../middleware/index'
 
 router.post("/login", getUserLogin);
 router.get("/users/me", authLog, getUserMe);
@@ -23,8 +21,6 @@ router.patch("/team/:team_id/member/:user_id", authAdminLider, patchMember);
 router.delete("/team/:team_id/member/:user_id", authAdminLider, deleteMemberSquad);
 router.delete("/users/:user_id", authAdmin, deleteUser);
 
-
 router.delete("/team/:team_id", authAdmin, deleteSquad);
 
 export default router;
-

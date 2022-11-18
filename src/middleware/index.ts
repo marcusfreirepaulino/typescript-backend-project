@@ -61,7 +61,7 @@ const authUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-// jwtLider -> libera acesso apenas para o líder e o admin -> 
+// jwtLider -> libera acesso apenas para o líder e o admin
 const authAdminLider = async (req: Request, res: Response, next: NextFunction) => {
     const [, token] = req.headers.authorization!.split(" ");
 
@@ -79,9 +79,14 @@ const authAdminLider = async (req: Request, res: Response, next: NextFunction) =
             console.log("42 AuthAL");
             const db = new Database();
             const data = await db.getSpecificSquad(payload.squad);
-            console.log("45 AuthAdminLider")
-            // if(data.error) 
-            next();
+            console.log("81", data.data);
+            console.log("82", data.data[0].leader);
+            if (data.data[0].leader === payload.id) {
+                next();
+            } else {
+                // caso ele não seja o leader da squad que ele participa
+                throw new Error();
+            }
         }
 
     } catch (error) {
@@ -89,34 +94,4 @@ const authAdminLider = async (req: Request, res: Response, next: NextFunction) =
     }
 };
 
-
-// const authUser = async (req : Request, res : Response, next : NextFunction) => {
-//     const [, token] = req.headers.authorization!.split(" ");
-
-//     try {
-
-//         const payload : any = jwt.verify(token, secret);
-//         //@ts-ignore
-//         // req.auth = {
-//         //     id: payload.id,
-//         // };
-//         console.log("19", payload);
-//         console.log("20", payload.is_admin);
-
-//         if (payload.is_admin) {  
-//             next();
-//         }
-//         else {
-//             return res.send("Acesso negado!");
-//         }
-
-//     } catch (error) {
-//         res.status(401).send('Falha na autenticação do usuário');
-//     }
-// };
-
-
-// jwtLiderAdmin -> libera acesso apenas para o Admin e o lider
-
-
-export { authAdmin, authAdminLider, authLog, authUser};
+export { authAdmin, authAdminLider, authLog, authUser };
