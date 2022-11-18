@@ -91,7 +91,6 @@ export class Database {
         try {
             const res = await this.orm.softDelete(id);
             if (res.err) throw res.err;
-            console.log(res.data)
 
             return { error: null, data: res.data };
         } catch (err) {
@@ -152,7 +151,7 @@ export class Database {
 
     public async updateSquad(id: uuid, _squad: Isquad) {
         try {
-            const res = await this.orm.update('squad', [id], _squad);
+            const res = await this.orm.updateSquadOnly('squad', [id], _squad);
             if (res.err) throw res.err;
             return { error: null, data: res.data };
         } catch (err) {
@@ -164,7 +163,6 @@ export class Database {
         try {
             const res = await this.orm.delete(_id);
             if (res.err) throw res.err;
-            console.log(res.data.rows)
 
             return { error: null, data: res.data };
         } catch (err) {
