@@ -36,7 +36,7 @@ export class Postegres{
         for (const [p, val] of Object.entries(options)) {
             str += `${p}='${val}'`;
         }
-        
+
         //SELECT ${cc} FROM table WHERE id = '38474'
         const queryText = `SELECT ${cc} FROM ${table} WHERE ${str}`;
         const response : any = await this.pool.query(queryText);//resposta da query
@@ -53,14 +53,13 @@ export class Postegres{
         for (const [p, val] of Object.entries(options)) {
             op += `'${val}',`;
         }
-        console.log(op);
 
         const op2 = op.substring(0, op.length - 1);
-        console.log(op2);
 
         const queryText = `INSERT INTO ${table} (${cc}) VALUES (${op2})`;
 
-        console.log(queryText);
+        console.log(queryText)
+        
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
@@ -79,14 +78,14 @@ export class Postegres{
             str += `${p}='${val}',`;
         }
         const op2 = str.substring(0, str.length - 1);
-        console.log(op2);
 
         let cc: Array<string> = options;
         cc.toString();
-        console.log(cc);
 
-        const queryText = `UPDATE ${table} SET ${op2}, updated_at = now() WHERE id = '${cc}'`;
-        console.log(queryText);
+
+        const queryText = `UPDATE ${table} SET ${op2} WHERE id = '${cc}'`;
+        console.log(queryText)
+
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
@@ -115,5 +114,4 @@ export class Postegres{
         const response : any = await this.pool.query(queryText);//resposta da query
          return {err: null, data: response}; // objeto com erro ou resposta
     }
-
 }
