@@ -10,6 +10,7 @@ export class Database {
     constructor(){}
 
 
+
     //user/users
     public async getLogin(_email: string){
         try{
@@ -17,10 +18,12 @@ export class Database {
             const res = await this.orm.selectUnic('users', ['username', 'email', 'password'], {email: _email});
             if (res.err) throw res.err;
             return {error: null, data: res.data.rows};
+
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
+
 
     public async getUsers(){
         try{
@@ -38,11 +41,13 @@ export class Database {
             const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], {id: _id});
             if (res.err) throw res.err;
             return {error: null, data: res.data.rows};
+
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
     
+
     public async insertUser(_user : Iuser){
         //Exemplo: {id: '7dceb776-107a-4397-ba18-bc5904cf83f8', username: 'claa', email: 'claa@gmail.com', password: '456456', first_name: 'clara', last_name: 'brigada', squad: 'a48ef7ee-b68c-4956-b073-69a946b4e32a', is_admin: true, inactive: false}
 
@@ -61,6 +66,7 @@ export class Database {
     };
 
 
+
     public async insertMemberSquad(idSquad: uuid, idUser: uuid){
         //exemplo:  'a48ef7ee-b68c-4956-b073-69a946b4e32a', '7dc35158-75c2-456f-a794-bb09d251ac7e'
 
@@ -70,6 +76,7 @@ export class Database {
 
             const res = await this.orm.updateMember('users', [idSquad, idUser]);
             console.log(res.data.rows)
+
             if (res.err) throw res.err;
             return {err: null, data: res.data};
         }catch(err){
@@ -94,21 +101,25 @@ export class Database {
             const res = await this.orm.softDelete(id);
             if (res.err) throw res.err;
             console.log(res.data)
+
             return {error: null, data: res.data};
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
 
+
     public async deletUserSquad(_id: uuid){
         try{
             const res = await this.orm.deleteMemberSquad(_id);
+
             if (res.err) throw res.err;
             return {error: null, data: res.data};
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
+
 
     //Squad/Squads
     public async getSquads() {
@@ -116,11 +127,13 @@ export class Database {
             const res = await this.orm.selectAll('squad', ['id', 'name', 'leader']);
             if (res.err) throw res.err;
             console.log(res.data.rows)
+
             return {error: null, data: res.data};
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
+
 
     public async getSpecificSquad(id: uuid) {
         try{
@@ -128,11 +141,13 @@ export class Database {
             const res = await this.orm.selectUnic('squad', ['id', 'name', 'leader'], {id: id});
             if (res.err) throw res.err;
             console.log(res.data.rows)
+
             return {error: null, data: res.data};
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
+
 
     public async insertSquad(_squad: Isquad){
         try{
@@ -142,6 +157,7 @@ export class Database {
             if (res.err) throw res.err;
             console.log(res.data.rows)
             return {error: null, data: res.data.rows};
+
         }catch(err){
             return {error: err as Error, data: null};
         }
@@ -150,6 +166,7 @@ export class Database {
     public async updateSquad(id: uuid, _squad : Isquad){
         try{
             const res = await this.orm.update('squad', [id], _squad);
+
             if (res.err) throw res.err;
             return {error: null, data: res.data};
         }catch(err){
@@ -162,9 +179,11 @@ export class Database {
             const res = await this.orm.delete(_id);
             if (res.err) throw res.err;
             console.log(res.data.rows)
+
             return {error: null, data: res.data};
         }catch(err){
             return {error: err as Error, data: null};
         }
     }
+    
 }

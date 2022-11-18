@@ -36,10 +36,12 @@ export class Postegres{
         for (const [p, val] of Object.entries(options)) {
             str += `${p}='${val}'`;
         }
+
         //SELECT ${cc} FROM table WHERE id = '38474'
         const queryText = `SELECT ${cc} FROM ${table} WHERE ${str}`;
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
+
     };
 
     public async insert(table : string, columns: columns, options: options) : Promise<resp<any>>{
@@ -55,7 +57,9 @@ export class Postegres{
         const op2 = op.substring(0, op.length - 1);
 
         const queryText = `INSERT INTO ${table} (${cc}) VALUES (${op2})`;
+
         console.log(queryText)
+        
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
@@ -78,8 +82,10 @@ export class Postegres{
         let cc: Array<string> = options;
         cc.toString();
 
+
         const queryText = `UPDATE ${table} SET ${op2} WHERE id = '${cc}'`;
         console.log(queryText)
+
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     }
