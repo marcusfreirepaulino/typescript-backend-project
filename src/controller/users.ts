@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { User } from "../validator";
 // import { loginUser, registerUser, getUserMeService, getUsersService, getUserByIdService, getTeamsService, getTeamByIdService } from "../services";
-import { loginUser } from "../services";
+import { loginUser, getUsersService } from "../services";
+
 
 // export default async function createUser(req: Request, res: Response) {
 //     const userData: User = req.body;
@@ -19,7 +20,7 @@ import { loginUser } from "../services";
 export async function getUserLogin(req: Request, res: Response) {
     const userData: User = req.body;
 
-    if(!userData) throw new Error;
+    if (!userData) throw new Error;
 
     try {
         const data = await loginUser(userData);
@@ -44,27 +45,27 @@ export async function getUserLogin(req: Request, res: Response) {
 //     }
 // }
 
-// export async function getUsers(req: Request, res: Response) {
-//     const userId: string = "123"; //id do próprio usuário, pegar do cookie
-//     const ifAdmin: boolean = true; //se é admin, pegar do cookie
-//     interface userType {
-//         id: string,
-//         is_admin: boolean
-//     };
-//     let user: userType = {
-//         id: userId,
-//         is_admin: ifAdmin
-//     }
-    
-//     try {
-//         const data = await getUsersService(user);
-//         res.status(202).send(data);
-//         return;
-//     } catch (error: any) {
-//         res.status(error.status).send(error.message);
-//         return;
-//     }
-// }
+export async function getUsers(req: Request, res: Response) {
+    const userId: string = "123"; //id do próprio usuário, pegar do cookie
+    const ifAdmin: boolean = true; //se é admin, pegar do cookie
+    interface userType {
+        id: string,
+        is_admin: boolean
+    };
+    let user: userType = {
+        id: userId,
+        is_admin: ifAdmin
+    }
+
+    try {
+        const data = await getUsersService(user);
+        res.status(202).send(data);
+        return;
+    } catch (error: any) {
+        res.status(error.status).send(error.message);
+        return;
+    }
+}
 
 // export async function getUserById(req: Request, res: Response) {
 //     const userId: string = "123"; //id do próprio usuário, pegar do cookie

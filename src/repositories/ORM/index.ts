@@ -3,10 +3,10 @@ import { Pool } from "pg";
 import { options, uuid, columns, Isquad, Iuser, resp } from '../../interfaces/index'
 
 const poolConfig = {
-    user: 'postgres',
-    host: 'localhost',
-    database: 'typescript-backend-project',
-    password: 'qazwsxedc',
+    user: 'tkjijkie',
+    host: 'lucky.db.elephantsql.com',
+    database: 'tkjijkie',
+    password: 'MPEda0HeLBTWs3Lqhj3mYjY6VFr5SQ2r',
     port: 5432
 }; 
 export class Postegres{
@@ -22,7 +22,7 @@ export class Postegres{
         let cc: columns = columns;
         cc.toString();
 
-        const queryText = `SELECT ${cc} FROM ${table}`;
+        const queryText = `SELECT ${cc} FROM ${table} WHERE inactive=false`;
         const response : any = await this.pool.query(queryText);//resposta da query
         return {err: null, data: response}; // objeto com erro ou resposta
     };
