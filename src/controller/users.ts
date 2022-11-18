@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../validator";
-import { loginUser, registerUser, getUserMeService, getUsersService, getUserByIdService, getTeamsService, getTeamByIdService, registerTeam, patchUserService, patchTeamService, patchMemberService, deleteMemberSquadService, deleteUserService, deleteSquadService } from "../services";
+import { loginUser, registerUser, getUserMeService, getUsersService, getUserByIdService, getTeamsService, getTeamByIdService, registerTeam, patchUserService, patchTeamService, patchMemberService, deleteMemberSquadService, deleteUserService, deleteSquadService } from "../services/index";
 
 import { Isquad, Iuser, uuid } from "../interfaces";
 // import * as dotenv from 'dotenv';
@@ -143,12 +143,14 @@ export async function getTeamById(req: Request, res: Response) {
 
 
 export async function patchUser(req: Request, res: Response) {
+    
     const userData: Iuser = req.body;
+    const id : string = req.params.user_id;
 
     if(!userData) throw new Error;
 
     try {
-        const data = await patchUserService(userData);
+        const data = await patchUserService(userData, id);
         res.status(202).send(data);
         return;
     } catch (error: any) {

@@ -7,7 +7,7 @@ const router = express.Router();
 router.use(express.json());
 // router.post('/login', login);
 
-import { authAdmin, authAdminLider, authLog } from '../middleware/index'
+import { authAdmin, authAdminLider, authLog, authUser } from '../middleware/index'
 
 router.post("/login", getUserLogin);
 router.get("/users/me", authLog, getUserMe);
@@ -17,14 +17,14 @@ router.get("/teams/", authAdmin, getTeams);
 router.get("/teams/:team_id", authLog, getTeamById);
 router.post("/users/", createUser);
 router.post("/team/", authAdmin, createTeam);
+router.patch("/users/:user_id", authUser, patchUser);
 
-router.patch("/users/:user_id", patchUser);
-router.patch("/teams/:team_id", patchTeam);
+
+router.patch("/teams/:team_id", authAdminLider, patchTeam);
 router.patch("/team/:team_id/member/:user_id", patchMember);
-
-router.delete("/teams/:team_id/members/:user_id", deleteMemberSquad);
-router.delete("/users/:user_id", deleteUser);
-router.delete("/teams/:team_id", deleteSquad);
+router.delete("/teams/:team_id/members/:user_id", authAdminLider, deleteMemberSquad);
+router.delete("/users/:user_id", authAdmin, deleteUser);
+router.delete("/teams/:team_id", authAdmin, deleteSquad);
 
 export default router;
 
