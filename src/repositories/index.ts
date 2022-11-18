@@ -12,7 +12,7 @@ export class Database {
 
 
     //user/users
-    public async getLogin(_email: string){
+    public async getLogin(_email?: string){
         try{
             if(!_email) throw new Error("é necessário um email");
             const res = await this.orm.selectUnic('users', ['username', 'email', 'password'], {email: _email});
@@ -35,7 +35,7 @@ export class Database {
         }
     }
 
-    public async getUsersID(_id: uuid){
+    public async getUsersID(_id?: uuid){
         try{
             if(!_id) throw new Error("é necessário um id");
             const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], {id: _id});
@@ -135,7 +135,7 @@ export class Database {
     }
 
 
-    public async getSpecificSquad(id: uuid) {
+    public async getSpecificSquad(id?: uuid) {
         try{
             if(!id) throw new Error("é necessário um id");
             const res = await this.orm.selectUnic('squad', ['id', 'name', 'leader'], {id: id});

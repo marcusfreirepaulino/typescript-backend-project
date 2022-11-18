@@ -1,7 +1,8 @@
 // nivel para criação de rotas e direcionamento do tratamento
+import { create } from 'domain';
 import * as express from 'express';
 
-import { getUserLogin, getUserMe, getUsers, getUserById, getTeams, getTeamById, createUser} from '../controller/users';
+import { getUserLogin, getUserMe, getUsers, getUserById, getTeams, getTeamById, createUser, createTeam, patchUser, patchTeam, patchMember} from '../controller/users';
 
 
 
@@ -20,27 +21,18 @@ const router = express.Router();
 
 router.post("/login",  getUserLogin);
 
-// router.get("/users/", getUsers);
-// router.get("/users/me", getUserMe);
-// router.get("/users/:user_id", getUserById);
-//router.get("/teams/", getTeams);
-//router.get("/teams/:team_id", getTeamById);
-
-
-router.post("/login",  getUserLogin);
-
 router.get("/users/", getUsers);
-// router.get("/users/me", getUserMe);
-// router.get("/users/:user_id", getUserById);
-//router.get("/teams/", getTeams);
-//router.get("/teams/:team_id", getTeamById);
+router.get("/users/me", getUserMe);
+router.get("/users/:user_id", getUserById);
+router.get("/teams/", getTeams);
+router.get("/teams/:team_id", getTeamById);
 
 router.post("/users/", createUser);
-router.post("/team/");
+router.post("/team/", createTeam);
 
-router.patch("/users/:user_id");
-router.patch("/teams/:team_id");
-router.post("/team/:team_id/member/:user_id");
+router.patch("/users/:user_id", patchUser);
+router.patch("/teams/:team_id", patchTeam);
+router.patch("/team/:team_id/member/:user_id", patchMember);
 
 router.delete("/teams/:team_id/members/:user_id");
 router.delete("/users/:user_id");
