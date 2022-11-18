@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../validator";
+
 import { loginUser, registerUser, getUserMeService, getUsersService, getUserByIdService, getTeamsService, getTeamByIdService } from "../services";
 import { Isquad, Iuser, uuid } from "../interfaces";
 
@@ -22,7 +23,7 @@ export async function createUser(req: Request, res: Response) {
 export async function getUserLogin(req: Request, res: Response) {
     const userData: User = req.body;
 
-    if(!userData) throw new Error;
+    if (!userData) throw new Error;
 
     try {
         const data = await loginUser(userData);
@@ -58,7 +59,7 @@ export async function getUsers(req: Request, res: Response) {
         id: userId,
         is_admin: ifAdmin
     }
-    
+
     try {
         const data = await getUsersService(user);
         res.status(202).send(data);
@@ -140,3 +141,4 @@ export async function getTeamById(req: Request, res: Response) {
         return;
     }
 }
+

@@ -1,31 +1,33 @@
 // nivel para criação de rotas e direcionamento do tratamento
 import * as express from 'express';
 
+
 import { getUserLogin, getUserMe, getUsers, getUserById, getTeams, getTeamById, createUser} from '../controller/users';
 
-
-
 const router = express.Router();
-
+router.use(express.json());
 // router.post('/login', login);
-
+import { authAdmin } from '../middleware/index'
 //criar o jwtUser -> libera acesso apenas para o user -> 
 // jwtLider -> libera acesso apenas para o líder -> 
 // jwtAdmin -> libera acesso apenas para o Admin ->
 // jwtLiderAdmin -> libera acesso apenas para o Admin e o lider
 // jwt
 
-// router.get("/users/", JWT.jwtUser , getUsers);
-
 
 router.post("/login",  getUserLogin);
 
+router.post("/login",  getUserLogin);
+router.get("/users/", authAdmin , getUsers);
+router.patch("/users/:user_id", );
 // router.get("/users/", getUsers);
 // router.get("/users/me", getUserMe);
 // router.get("/users/:user_id", getUserById);
 //router.get("/teams/", getTeams);
 //router.get("/teams/:team_id", getTeamById);
 
+
+// router.post("/users/", authAdmin, list);
 
 router.post("/login",  getUserLogin);
 
@@ -36,6 +38,7 @@ router.get("/users/", getUsers);
 //router.get("/teams/:team_id", getTeamById);
 
 router.post("/users/", createUser);
+
 router.post("/team/");
 
 router.patch("/users/:user_id");
