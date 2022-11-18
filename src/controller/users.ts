@@ -4,11 +4,14 @@ import { loginUser, registerUser, getUserMeService, getUsersService, getUserById
 import { Isquad, Iuser, uuid } from "../interfaces";
 
 export async function createUser(req: Request, res: Response) {
+
     const userData: User = req.body;
 
+    if(!userData) throw new Error;
+
     try {
-        await registerUser(userData);
-        res.status(202).send("Cadastrado com sucesso!");
+        const data = await loginUser(userData);
+        res.status(202).send(data);
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
