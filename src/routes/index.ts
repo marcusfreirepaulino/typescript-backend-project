@@ -2,7 +2,7 @@
 import { create } from 'domain';
 import * as express from 'express';
 
-import { getUserLogin, getUserMe, getUsers, getUserById, getTeams, getTeamById, createUser, createTeam, patchUser, patchTeam, patchMember} from '../controller/users';
+import { getUserLogin, getUserMe, getUsers, getUserById, getTeams, getTeamById, createUser, createTeam, patchUser, patchTeam, patchMember, deleteMemberSquad, deleteUser, deleteSquad } from '../controller/users';
 
 const router = express.Router();
 router.use(express.json());
@@ -15,10 +15,10 @@ import { authAdmin } from '../middleware/index'
 // jwt
 
 
-router.post("/login",  getUserLogin);
+router.post("/login", getUserLogin);
 
 
-router.get("/users/", authAdmin , getUsers);
+router.get("/users/", authAdmin, getUsers);
 router.get("/users/me", getUserMe);
 router.get("/users/:user_id", getUserById);
 router.get("/teams/", getTeams);
@@ -31,9 +31,9 @@ router.patch("/users/:user_id", patchUser);
 router.patch("/teams/:team_id", patchTeam);
 router.patch("/team/:team_id/member/:user_id", patchMember);
 
-router.delete("/teams/:team_id/members/:user_id");
-router.delete("/users/:user_id");
-router.delete("/teams/:team_id");
+router.delete("/teams/:team_id/members/:user_id", deleteMemberSquad);
+router.delete("/users/:user_id", deleteUser);
+router.delete("/teams/:team_id", deleteSquad);
 
 export default router;
 
