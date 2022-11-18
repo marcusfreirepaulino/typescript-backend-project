@@ -56,13 +56,13 @@ export const loginUser = async (data: Iuser) => {
         const response: resp<[Iuser]> = await db.getLogin(emailUser);
 
         if (!response.err) {
-            // console.log("51");
+
             const user = response.data![0];
-            // console.log("53", user.password);
+
             const compare = await bcrypt.compare(password as string, user.password as string)
 
             if (!compare) throw new Error;
-            // console.log("57");
+
             const token = jwt.sign(
                 {
                     id: user.id,
@@ -161,7 +161,7 @@ export const getTeamsService = async () => {
     try {
 
         const db = new Database();
-        const data = await db.getSquads();     
+        const data = await db.getSquads();
         if (!data.error) {
             return data.data;
         }
@@ -208,12 +208,12 @@ export const patchUserService = async (user: Iuser, id: string) => {
 
 export const patchTeamService = async (teamId: string, teamUpdate: Isquad) => {
     try {
-            const db = new Database();
-            const data = await db.updateSquad(teamId, teamUpdate);
+        const db = new Database();
+        const data = await db.updateSquad(teamId, teamUpdate);
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -224,12 +224,12 @@ export const patchTeamService = async (teamId: string, teamUpdate: Isquad) => {
 
 export const patchMemberService = async (teamId: string, memberUpdate: string) => {
     try {
-            const db = new Database();
-            const data = await db.insertMemberSquad(teamId, memberUpdate) //recebe usuarios, trocar depois
+        const db = new Database();
+        const data = await db.insertMemberSquad(teamId, memberUpdate) //recebe usuarios, trocar depois
 
-            if (!data.err) {
-                return data.data;
-            }
+        if (!data.err) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -240,12 +240,12 @@ export const patchMemberService = async (teamId: string, memberUpdate: string) =
 
 export const deleteMemberSquadService = async (memberId: string) => {
     try {
-            const db = new Database();
-            const data = await db.deletUserSquad(memberId)
+        const db = new Database();
+        const data = await db.deletUserSquad(memberId)
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -256,12 +256,12 @@ export const deleteMemberSquadService = async (memberId: string) => {
 
 export const deleteUserService = async (userId: string) => {
     try {
-            const db = new Database();
-            const data = await db.deletUser(userId)
+        const db = new Database();
+        const data = await db.deletUser(userId)
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {
@@ -272,12 +272,12 @@ export const deleteUserService = async (userId: string) => {
 
 export const deleteSquadService = async (id: string) => {
     try {
-            const db = new Database();
-            const data = await db.deletSquad(id)
+        const db = new Database();
+        const data = await db.deletSquad(id)
 
-            if (!data.error) {
-                return data.data;
-            }
+        if (!data.error) {
+            return data.data;
+        }
 
     }
     catch (err: any) {

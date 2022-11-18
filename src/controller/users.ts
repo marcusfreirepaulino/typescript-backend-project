@@ -32,7 +32,7 @@ export async function createTeam(req: Request, res: Response) {
         const teamData: Isquad = req.body;
         if (!teamData) throw new Error;
         const data = await registerTeam(teamData);
-        res.status(202).send({message: "Equipe cadastrada!"});
+        res.status(202).send({ message: "Equipe cadastrada!" });
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
@@ -143,11 +143,11 @@ export async function getTeamById(req: Request, res: Response) {
 
 
 export async function patchUser(req: Request, res: Response) {
-    
-    const userData: Iuser = req.body;
-    const id : string = req.params.user_id;
 
-    if(!userData) throw new Error;
+    const userData: Iuser = req.body;
+    const id: string = req.params.user_id;
+
+    if (!userData) throw new Error;
 
     try {
         const data = await patchUserService(userData, id);
@@ -192,7 +192,7 @@ export async function deleteMemberSquad(req: Request, res: Response) {
 
     try {
         const data = await deleteMemberSquadService(teamId);
-        res.status(202).send({message: "Usuário removido da equipe."});
+        res.status(202).send({ message: "Usuário removido da equipe." });
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
@@ -205,7 +205,7 @@ export async function deleteUser(req: Request, res: Response) {
 
     try {
         const data = await deleteUserService(id);
-        res.status(202).send({message: "Usuário deletado."});
+        res.status(202).send({ message: "Usuário deletado." });
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
@@ -218,7 +218,7 @@ export async function deleteSquad(req: Request, res: Response) {
 
     try {
         const data = await deleteSquadService(squadId);
-        res.status(202).send({message: "Equipe deletada."});
+        res.status(202).send({ message: "Equipe deletada." });
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);

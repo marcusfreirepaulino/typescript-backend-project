@@ -1,1 +1,0 @@
-// Nivel de extração de dados

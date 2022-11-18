@@ -16,7 +16,6 @@ export class Postegres {
     }
 
     // métodos para conecção com banco de dados
-    //seleciona deteminados campos de uma table => columns -> ['username', 'email', ...]
     public async selectAll(table: string, columns: columns): Promise<resp<any>> {
 
         let cc: columns = columns;
@@ -85,7 +84,7 @@ export class Postegres {
     }
 
     public async update(table: string, options: columns, columns: options): Promise<resp<any>> {
-        //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fkffk', username: 'ddhh'}
+        //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fulano', username: 'ciclano'}
         let str = '';
         for (const [p, val] of Object.entries(columns)) { // { id: 11223, username: 'teste'} => 'id=11223,username:teste,'
             str += `${p}='${val}',`;
@@ -103,7 +102,7 @@ export class Postegres {
     }
 
     public async updateSquadOnly(table: string, options: columns, columns: options): Promise<resp<any>> {
-        //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fkffk', username: 'ddhh'}
+        //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fulano', username: 'ciclano'}
         let str = '';
         for (const [p, val] of Object.entries(columns)) { // { id: 11223, username: 'teste'} => 'id=11223,username:teste,'
             str += `${p}='${val}',`;
