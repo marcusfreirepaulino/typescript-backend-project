@@ -36,11 +36,10 @@ export class Database {
         }
     }
 
-
     public async getUsersID(_id?: uuid) {
         try {
-            if (!_id) throw new Error("é necessário um id");
-            const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], { id: _id });
+            // if (!_id) throw new Error("é necessário um id");
+            const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'first_name', 'last_name', 'squad', 'is_admin'], { id: _id });
             if (res.err) throw res.err;
 
             return { error: null, data: res.data };
@@ -52,23 +51,9 @@ export class Database {
     // public async insertUser(id: uuid, username: string, email: string, password: string, first_name: string, last_name: string, squad?: string, is_admin: boolean = false){
     public async insertUser(_user: Iuser) {
         try {
-            if (!_user.id) throw new Error("Insira um id!");
-            if (!_user.username) throw new Error("Insira um username!");
-            if (!_user.last_name && !_user.first_name) throw new Error("Insira nome e sobrenome!");
-            if (!_user.email) throw new Error("Insira um e-mail!");
-            if (!_user.password) throw new Error("Insira uma senha!");
-            if (!_user.is_admin) throw new Error("Informe se o usuário inserido é administrador!");
-
-            try {
-                if (!_user) throw new Error("Verifiquei seus dados");
-
-                const res = await this.orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin', 'inactive'], _user);
-
-                if (res.err) throw res.err;
-                return { error: null, data: res.data };
-            } catch (err) {
-                return { error: err as Error, data: null };
-            }
+            const res = await this.orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'inactive','is_admin'], _user);
+            if (res.err) throw res.err;
+            return { error: null, data: res.data };
         } catch (err) {
             return { error: err as Error, data: null };
         }
@@ -130,9 +115,8 @@ export class Database {
     //Squad/Squads
     public async getSquads() {
         try {
-            const res = await this.orm.selectAll('squad', ['id', 'name', 'leader']);
+            const res = await this.orm.selectAllteams('squad', ['id', 'name', 'leader']);
             if (res.err) throw res.err;
-            console.log(res.data.rows)
 
             return { error: null, data: res.data };
         } catch (err) {
@@ -146,7 +130,7 @@ export class Database {
             if (!id) throw new Error("é necessário um id");
             const res = await this.orm.selectUnic('squad', ['id', 'name', 'leader'], { id: id });
             if (res.err) throw res.err;
-            console.log(res.data.rows)
+            console.log(res.data)
 
             return { error: null, data: res.data };
         } catch (err) {
@@ -156,12 +140,9 @@ export class Database {
 
 
     public async insertSquad(_squad: Isquad) {
-        try {
-            if (!_squad) throw new Error("verifique seus dados");
+        try {           
             const res = await this.orm.insert('squad', ['id', 'name', 'leader'], _squad);
             if (res.err) throw res.err;
-
-            console.log(res.data.rows)
             return { error: null, data: res.data.rows };
 
         } catch (err) {
