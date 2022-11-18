@@ -21,7 +21,7 @@ interface Isquad {
 }
 
 interface resp<G> {
-    err: Error | null,
+    err?: Error | null,
     data: G | null 
 };
 

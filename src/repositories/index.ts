@@ -11,10 +11,12 @@ export class Database {
 
 
 
+
     public async getLogin(_email?: string) {
         try {
             if (!_email) throw new Error("é necessário um email");
             const res = await this.orm.selectUnic('users', ['id', 'email', 'password', 'squad', 'is_admin', 'inactive'], { email: _email });
+
             if (res.err) throw res.err;
             return { err: null, data: res.data.rows };
         } catch (err) {
@@ -49,13 +51,8 @@ export class Database {
     // public async insertUser(id: uuid, username: string, email: string, password: string, first_name: string, last_name: string, squad?: string, is_admin: boolean = false){
     public async insertUser(_user: Iuser) {
         try {
-           
-
-            console.log("54 insert user")
             const res = await this.orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'inactive','is_admin'], _user);
-
             if (res.err) throw res.err;
-            console.log("63 database insert user", res.data);
             return { error: null, data: res.data };
         } catch (err) {
             return { error: err as Error, data: null };
@@ -120,6 +117,7 @@ export class Database {
         try {
             const res = await this.orm.selectAllteams('squad', ['id', 'name', 'leader']);
             if (res.err) throw res.err;
+
             return { error: null, data: res.data };
         } catch (err) {
             return { error: err as Error, data: null };
@@ -142,11 +140,9 @@ export class Database {
 
 
     public async insertSquad(_squad: Isquad) {
-        try {
-           
+        try {           
             const res = await this.orm.insert('squad', ['id', 'name', 'leader'], _squad);
             if (res.err) throw res.err;
-
             return { error: null, data: res.data.rows };
 
         } catch (err) {
