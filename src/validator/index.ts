@@ -48,12 +48,13 @@ class NameValidator {
 interface User {
     id?: string,
     username?: string;
-    squad?: string;
-    email?: string;
-    password?: string;
-    first_name?: string;
-    last_name?: string;
-    is_admin?: boolean;
+    squad?: string,
+    email?: string,
+    password?: string,
+    first_name?: string,
+    last_name?: string,
+    is_admin?: boolean,
+    inactive? : boolean
 }
 
 interface Team{
