@@ -95,8 +95,7 @@ export class Postegres {
         let cc: Array<string> = options;
         cc.toString();
 
-
-        const queryText = `UPDATE ${table} SET ${op2} WHERE id = '${cc}'`;
+        const queryText = `UPDATE ${table} SET ${op2}, updated_at=now() WHERE id = '${cc}'`;
         console.log(queryText)
 
         const response: any = await this.pool.query(queryText);//resposta da query

@@ -42,6 +42,25 @@ const authLog = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+
+// jwtLog -> libera acesso apenas para usuarios logados
+const authUser = async (req: Request, res: Response, next: NextFunction) => {
+    const [, token] = req.headers.authorization!.split(" ");
+
+    try {
+
+        const payload: any = jwt.verify(token, secret);
+        const idUser: string = req.params.user_id;
+
+        if (payload.id === idUser) {
+            next();
+        }
+
+    } catch (error) {
+        res.status(401).send('Falha na autenticação do usuário');
+    }
+};
+
 // jwtLider -> libera acesso apenas para o líder e o admin -> 
 const authAdminLider = async (req: Request, res: Response, next: NextFunction) => {
     const [, token] = req.headers.authorization!.split(" ");
@@ -100,4 +119,4 @@ const authAdminLider = async (req: Request, res: Response, next: NextFunction) =
 // jwtLiderAdmin -> libera acesso apenas para o Admin e o lider
 
 
-export { authAdmin, authAdminLider, authLog };
+export { authAdmin, authAdminLider, authLog, authUser};
