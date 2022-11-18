@@ -42,18 +42,19 @@ export const loginUser = async (data: Iuser) =>{
         new validator.PasswordValidator(data.password);
 
         let emailUser = data.email;
-        let password = data.email;
-
+        let password = data.password;
+        console.log("46",data);
         const db = new Database();
-        const response : resp<Iuser> = await db.getLogin(emailUser);
+        const response : resp<[Iuser]> = await db.getLogin(emailUser);
         
         if(!response.err){
-
-            const user = response.data as Iuser;
+            // console.log("51");
+            const user = response.data![0];
+            // console.log("53", user.password);
             const compare = await bcrypt.compare(password as string, user.password as string)
             
             if(!compare) throw new Error;
-    
+            // console.log("57");
             const token = jwt.sign(
                         { id: user.id,
                           squad: user.squad,
@@ -104,14 +105,12 @@ export const getUserMeService = async (id: string) =>{
         if(!data.error){
             return data.data;
         }
-        
     }
     catch(err: any){
         return {err: err}
     }
 
 }
-
 
 export const getUsersService = async (user: Iuser) =>{
     try{
@@ -135,13 +134,11 @@ export const getUserByIdService = async (user: Iuser) =>{
     try{
         if (user.is_admin=true){
             const db = new Database();
-            const data = await db.getUsersID(user.id);
-            
+            const data = await db.getUsersID(user.id);            
             if(!data.error){
                 return data.data;      
             }  
         } else { return ("Acesso negado.")}
-        
     }
     catch(err: any){
         return {err: err}
@@ -153,8 +150,7 @@ export const getTeamsService = async (user: Iuser) =>{
     try{
         if (user.is_admin=true){
             const db = new Database();
-            const data = await db.getSquads(); //recebe usuarios, trocar depois
-            
+            const data = await db.getSquads(); //recebe usuarios, trocar depois       
             if(!data.error){
                 return data.data;  
             }      

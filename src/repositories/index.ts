@@ -7,49 +7,57 @@ import { isBooleanObject } from "util/types";
 export class Database {
     private orm = new Postegres;
     private tables = ["usuario", "equipe"];
-    constructor(){}
+    constructor() { }
 
 
+
+
+    public async getLogin(_email?: string) {
+        try {
+            if (!_email) throw new Error("é necessário um email");
+            const res = await this.orm.selectUnic('users', ['id', 'email', 'password', 'squad', 'is_admin', 'inactive'], { email: _email });
+            
+            if (res.err) throw res.err;
+            return { err: null, data: res.data.rows };
+        } catch (err) {
+            return { err: err as Error, data: null };
+        }
+    }
 
     //user/users
-    public async getLogin(_email?: string){
-        try{
-            if(!_email) throw new Error("é necessário um email");
-            const res = await this.orm.selectUnic('users', ['username', 'email', 'password'], {email: _email});
-            if (res.err) throw res.err;
-            return {error: null, data: res.data.rows};
-
-        }catch(err){
-            return {error: err as Error, data: null};
-        }
-    }
-
-
-    public async getUsers(){
-        try{
+    public async getUsers() {
+        try {
             const res = await this.orm.selectAll('users', ['*']);
             if (res.err) throw res.err;
-            return {error: null, data: res.data.rows};
-        }catch(err){
-            return {error: err as Error, data: null};
+            res.data.password = null
+            return { error: null, data: res.data };
+        } catch (err) {
+            return { error: err as Error, data: null };
         }
     }
+
 
     public async getUsersID(_id?: uuid){
         try{
             if(!_id) throw new Error("é necessário um id");
             const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], {id: _id});
             if (res.err) throw res.err;
-            return {error: null, data: res.data.rows};
 
-        }catch(err){
-            return {error: err as Error, data: null};
+            return { error: null, data: res.data };
+        } catch (err) {
+            return { error: err as Error, data: null };
         }
     }
-    
 
-    public async insertUser(_user : Iuser){
-        //Exemplo: {id: '7dceb776-107a-4397-ba18-bc5904cf83f8', username: 'claa', email: 'claa@gmail.com', password: '456456', first_name: 'clara', last_name: 'brigada', squad: 'a48ef7ee-b68c-4956-b073-69a946b4e32a', is_admin: true, inactive: false}
+    // public async insertUser(id: uuid, username: string, email: string, password: string, first_name: string, last_name: string, squad?: string, is_admin: boolean = false){
+    public async insertUser(_user: Iuser) {
+        try {
+            if (!_user.id) throw new Error("Insira um id!");
+            if (!_user.username) throw new Error("Insira um username!");
+            if (!_user.last_name && !_user.first_name) throw new Error("Insira nome e sobrenome!");
+            if (!_user.email) throw new Error("Insira um e-mail!");
+            if (!_user.password) throw new Error("Insira uma senha!");
+            if (!_user.is_admin) throw new Error("Informe se o usuário inserido é administrador!");
 
         try{
             if(!_user) throw new Error("Verifiquei seus dados");
@@ -57,15 +65,11 @@ export class Database {
             const res = await this.orm.insert('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin', 'inactive'], _user);
 
             if (res.err) throw res.err;
-            console.log(res.data.rows)
-            return {error: null, data: res.data.rows};
-        }catch(err){
-            return {error: err as Error, 
-            data: null};
+            return { error: null, data: res.data };
+        } catch (err) {
+            return { error: err as Error, data: null };
         }
     };
-
-
 
     public async insertMemberSquad(idSquad: uuid, idUser: uuid){
         //exemplo:  'a48ef7ee-b68c-4956-b073-69a946b4e32a', '7dc35158-75c2-456f-a794-bb09d251ac7e'
@@ -76,11 +80,10 @@ export class Database {
 
             const res = await this.orm.updateMember('users', [idSquad, idUser]);
             console.log(res.data.rows)
-
             if (res.err) throw res.err;
-            return {err: null, data: res.data};
-        }catch(err){
-            return {err: err as Error, data: null};
+            return { err: null, data: res.data };
+        } catch (err) {
+            return { err: err as Error, data: null };
         }
     };
     
@@ -114,9 +117,9 @@ export class Database {
             const res = await this.orm.deleteMemberSquad(_id);
 
             if (res.err) throw res.err;
-            return {error: null, data: res.data};
-        }catch(err){
-            return {error: err as Error, data: null};
+            return { error: null, data: res.data };
+        } catch (err) {
+            return { error: err as Error, data: null };
         }
     }
 
@@ -152,9 +155,9 @@ export class Database {
     public async insertSquad(_squad: Isquad){
         try{
             if(!_squad) throw new Error("verifique seus dados");
-
             const res = await this.orm.insert('squad', ['id', 'name', 'leader'], _squad);
             if (res.err) throw res.err;
+
             console.log(res.data.rows)
             return {error: null, data: res.data.rows};
 
@@ -166,16 +169,15 @@ export class Database {
     public async updateSquad(id: uuid, _squad : Isquad){
         try{
             const res = await this.orm.update('squad', [id], _squad);
-
             if (res.err) throw res.err;
-            return {error: null, data: res.data};
-        }catch(err){
-            return {error: err as Error, data: null};
+            return { error: null, data: res.data };
+        } catch (err) {
+            return { error: err as Error, data: null };
         }
     }
 
-    public async deletSquad(_id: uuid){
-        try{
+    public async deletSquad(_id: uuid) {
+        try {
             const res = await this.orm.delete(_id);
             if (res.err) throw res.err;
             console.log(res.data.rows)
@@ -185,5 +187,5 @@ export class Database {
             return {error: err as Error, data: null};
         }
     }
-    
+
 }
