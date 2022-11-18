@@ -161,7 +161,7 @@ export const getTeamsService = async () => {
     try {
 
         const db = new Database();
-        const data = await db.getSquads(); //recebe usuarios, trocar depois       
+        const data = await db.getSquads();     
         if (!data.error) {
             return data.data;
         }
@@ -206,17 +206,14 @@ export const patchUserService = async (user: Iuser, id: string) => {
 
 }
 
-export const patchTeamService = async (user: Iuser, teamUpdate: Isquad) => {
-    const id: string = user.id as string;
+export const patchTeamService = async (teamId: string, teamUpdate: Isquad) => {
     try {
-        if (user.is_admin = true) {
             const db = new Database();
-            const data = await db.updateSquad(id, teamUpdate) //recebe usuarios, trocar depois
+            const data = await db.updateSquad(teamId, teamUpdate);
 
             if (!data.error) {
                 return data.data;
             }
-        } else { return ("Acesso negado.") }
 
     }
     catch (err: any) {
@@ -225,17 +222,14 @@ export const patchTeamService = async (user: Iuser, teamUpdate: Isquad) => {
 
 }
 
-export const patchMemberService = async (user: Iuser, teamId: string, memberUpdate: Iuser) => {
-    const id: string = user.id as string;
+export const patchMemberService = async (teamId: string, memberUpdate: string) => {
     try {
-        if (user.is_admin = true || user.squad == teamId) {
             const db = new Database();
-            const data = await db.updateUser(id, memberUpdate) //recebe usuarios, trocar depois
+            const data = await db.insertMemberSquad(teamId, memberUpdate) //recebe usuarios, trocar depois
 
-            if (!data.error) {
+            if (!data.err) {
                 return data.data;
             }
-        } else { return ("Acesso negado.") }
 
     }
     catch (err: any) {
@@ -244,17 +238,14 @@ export const patchMemberService = async (user: Iuser, teamId: string, memberUpda
 
 }
 
-export const deleteMemberSquadService = async (user: Iuser, teamId: string, memberUpdate: Iuser) => {
-    const id: string = memberUpdate.id as string;
+export const deleteMemberSquadService = async (memberId: string) => {
     try {
-        if (user.is_admin = true || user.squad == teamId) {
             const db = new Database();
-            const data = await db.deletUserSquad(id) //recebe usuarios, trocar depois
+            const data = await db.deletUserSquad(memberId)
 
             if (!data.error) {
                 return data.data;
             }
-        } else { return ("Acesso negado.") }
 
     }
     catch (err: any) {
@@ -263,17 +254,14 @@ export const deleteMemberSquadService = async (user: Iuser, teamId: string, memb
 
 }
 
-export const deleteUserService = async (id: string, user: Iuser) => {
-    const userId: string = id as string;
+export const deleteUserService = async (userId: string) => {
     try {
-        if (user.is_admin = true) {
             const db = new Database();
-            const data = await db.deletUser(id) //recebe usuarios, trocar depois
+            const data = await db.deletUser(userId)
 
             if (!data.error) {
                 return data.data;
             }
-        } else { return ("Acesso negado.") }
 
     }
     catch (err: any) {
@@ -282,16 +270,14 @@ export const deleteUserService = async (id: string, user: Iuser) => {
 
 }
 
-export const deleteSquadService = async (id: string, user: Iuser) => {
+export const deleteSquadService = async (id: string) => {
     try {
-        if (user.is_admin = true) {
             const db = new Database();
-            const data = await db.deletSquad(id) //recebe usuarios, trocar depois
+            const data = await db.deletSquad(id)
 
             if (!data.error) {
                 return data.data;
             }
-        } else { return ("Acesso negado.") }
 
     }
     catch (err: any) {

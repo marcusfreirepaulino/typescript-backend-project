@@ -102,8 +102,26 @@ export class Postegres {
         return { err: null, data: response }; // objeto com erro ou resposta
     }
 
+    public async updateSquadOnly(table: string, options: columns, columns: options): Promise<resp<any>> {
+        //Columns -> receber novos dados que se deseja atualizar => { last_name: 'fkffk', username: 'ddhh'}
+        let str = '';
+        for (const [p, val] of Object.entries(columns)) { // { id: 11223, username: 'teste'} => 'id=11223,username:teste,'
+            str += `${p}='${val}',`;
+        }
+        const op2 = str.substring(0, str.length - 1);
+
+        let cc: Array<string> = options;
+        cc.toString();
+
+        const queryText = `UPDATE ${table} SET ${op2} WHERE id = '${cc}'`;
+        console.log(queryText)
+
+        const response: any = await this.pool.query(queryText);//resposta da query
+        return { err: null, data: response }; // objeto com erro ou resposta
+    }
+
     public async deleteMemberSquad(_id: uuid): Promise<resp<any>> {
-        const queryText = `UPDATE users SET squad = NULL, updated_at = now() WHERE id = '${_id}'`;
+        const queryText = `UPDATE 'users' SET squad = NULL, updated_at = now() WHERE id='${_id}'`;
         console.log(queryText);
         const response: any = await this.pool.query(queryText);//resposta da query
         return { err: null, data: response }; // objeto com erro ou resposta
@@ -118,11 +136,9 @@ export class Postegres {
         return { err: null, data: response }; // objeto com erro ou resposta
     }
 
-    public async softDelete(id: string): Promise<resp<any>> {
-        // DELETE FROM [ tabela ] WHERE [ condicao_de_busca ]; => {'}
-        // CRIAR MAIS UMA COLUNA => DELETE: TRUE OU FALSE & deleted_at: now() -> registra a data de delete
-
-        const queryText = `UPDATE users SET inactive = true, deleted_at = now() where id = '${id}'`;
+    public async softDelete(_id: string): Promise<resp<any>> {
+        const queryText = `UPDATE "users" SET inactive = 'true' WHERE id='${_id}'`;
+        console.log(queryText);
         const response: any = await this.pool.query(queryText);//resposta da query
         return { err: null, data: response }; // objeto com erro ou resposta
     }

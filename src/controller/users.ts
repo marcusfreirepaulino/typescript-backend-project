@@ -160,19 +160,11 @@ export async function patchUser(req: Request, res: Response) {
 }
 
 export async function patchTeam(req: Request, res: Response) {
-    const teamId = req.params.team_id;
+    const teamId: string = req.params.team_id;
     const teamUpdate: Isquad = req.body;
 
-    const userId: string = "123"; //id do próprio usuário, pegar do cookie
-    const ifAdmin: boolean = true; //se é admin, pegar do cookie
-    let user: Iuser = {
-        id: userId,
-        is_admin: ifAdmin,
-        squad: teamId,
-    }
-
     try {
-        const data = await patchTeamService(user, teamUpdate);
+        const data = await patchTeamService(teamId, teamUpdate);
         res.status(202).send(data);
         return;
     } catch (error: any) {
@@ -183,18 +175,10 @@ export async function patchTeam(req: Request, res: Response) {
 
 export async function patchMember(req: Request, res: Response) {
     const teamId: uuid = req.params.team_id;
-    const memberUpdate: Iuser = req.body;
-
-    const userId: string = "123"; //id do próprio usuário, pegar do cookie
-    const ifAdmin: boolean = true; //se é admin, pegar do cookie
-    let user: Iuser = {
-        id: userId,
-        is_admin: ifAdmin,
-        squad: teamId,
-    }
+    const memberUpdate: string = req.params.user_id;
 
     try {
-        const data = await patchMemberService(user, teamId, memberUpdate);
+        const data = await patchMemberService(teamId, memberUpdate);
         res.status(202).send(data);
         return;
     } catch (error: any) {
@@ -206,22 +190,9 @@ export async function patchMember(req: Request, res: Response) {
 export async function deleteMemberSquad(req: Request, res: Response) {
     const teamId: uuid = req.params.team_id;
 
-    let userChange: Iuser = {
-        id: req.params.user_id,
-        squad: null,
-    }
-
-    const userId: string = "123"; //id do próprio usuário, pegar do cookie
-    const ifAdmin: boolean = true; //se é admin, pegar do cookie
-    let user: Iuser = {
-        id: userId,
-        is_admin: ifAdmin,
-        squad: teamId,
-    }
-
     try {
-        const data = await deleteMemberSquadService(user, teamId, userChange);
-        res.status(202).send(data);
+        const data = await deleteMemberSquadService(teamId);
+        res.status(202).send({message: "Usuário removido da equipe."});
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
@@ -230,18 +201,11 @@ export async function deleteMemberSquad(req: Request, res: Response) {
 }
 
 export async function deleteUser(req: Request, res: Response) {
-    const id: uuid = req.params.user_id;
-
-    const userId: string = "123"; //id do próprio usuário, pegar do cookie
-    const ifAdmin: boolean = true; //se é admin, pegar do cookie
-    let user: Iuser = {
-        id: userId,
-        is_admin: ifAdmin
-    }
+    const id: string = req.params.user_id;
 
     try {
-        const data = await deleteUserService(id, user);
-        res.status(202).send(data);
+        const data = await deleteUserService(id);
+        res.status(202).send({message: "Usuário deletado."});
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
@@ -250,18 +214,11 @@ export async function deleteUser(req: Request, res: Response) {
 }
 
 export async function deleteSquad(req: Request, res: Response) {
-    const id: uuid = req.params.team_id;
-
-    const userId: string = "123"; //id do próprio usuário, pegar do cookie
-    const ifAdmin: boolean = true; //se é admin, pegar do cookie
-    let user: Iuser = {
-        id: userId,
-        is_admin: ifAdmin
-    }
+    const squadId: uuid = req.params.team_id;
 
     try {
-        const data = await deleteSquadService(id, user);
-        res.status(202).send(data);
+        const data = await deleteSquadService(squadId);
+        res.status(202).send({message: "Equipe deletada."});
         return;
     } catch (error: any) {
         res.status(error.status).send(error.message);
