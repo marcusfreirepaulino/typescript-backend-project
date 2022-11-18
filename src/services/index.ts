@@ -180,3 +180,58 @@ export const getTeamByIdService = async (user: Iuser, squad: Isquad) =>{
     }
 
 }
+
+export const patchUserService = async (user: Iuser) =>{
+    try{
+        const id: string = user.id as string;
+        const db = new Database();
+        const data = await db.updateUser(id , user);
+        
+        if(!data.error){
+            return data.data;
+        }
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+
+export const patchTeamService = async (user: Iuser, teamUpdate: Isquad) =>{
+    const id: string = user.id as string;
+    try{
+        if (user.is_admin=true){
+            const db = new Database();
+            const data = await db.updateSquad(id, teamUpdate) //recebe usuarios, trocar depois
+            
+            if(!data.error){
+                return data.data;  
+            }      
+        } else { return ("Acesso negado.")}
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}
+
+export const patchMemberService = async (user: Iuser, teamId: string, memberUpdate: Iuser) =>{
+    const id: string = user.id as string;
+    try{
+        if (user.is_admin=true && user.squad==teamId){
+            const db = new Database();
+            const data = await db.updateUser(id, memberUpdate) //recebe usuarios, trocar depois
+            
+            if(!data.error){
+                return data.data;  
+            }      
+        } else { return ("Acesso negado.")}
+        
+    }
+    catch(err: any){
+        return {err: err}
+    }
+
+}

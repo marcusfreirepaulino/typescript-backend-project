@@ -11,10 +11,12 @@ export class Database {
 
 
 
+
     public async getLogin(_email?: string) {
         try {
             if (!_email) throw new Error("é necessário um email");
             const res = await this.orm.selectUnic('users', ['id', 'email', 'password', 'squad', 'is_admin', 'inactive'], { email: _email });
+            
             if (res.err) throw res.err;
             return { err: null, data: res.data.rows };
         } catch (err) {
@@ -34,10 +36,11 @@ export class Database {
         }
     }
 
-    public async getUsersID(_id: uuid) {
-        try {
-            if (!_id) throw new Error("é necessário um id");
-            const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], { id: _id });
+
+    public async getUsersID(_id?: uuid){
+        try{
+            if(!_id) throw new Error("é necessário um id");
+            const res = await this.orm.selectUnic('users', ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'squad', 'is_admin'], {id: _id});
             if (res.err) throw res.err;
 
             return { error: null, data: res.data };
@@ -135,7 +138,7 @@ export class Database {
     }
 
 
-    public async getSpecificSquad(id: uuid) {
+    public async getSpecificSquad(id?: uuid) {
         try{
             if(!id) throw new Error("é necessário um id");
             const res = await this.orm.selectUnic('squad', ['id', 'name', 'leader'], {id: id});
