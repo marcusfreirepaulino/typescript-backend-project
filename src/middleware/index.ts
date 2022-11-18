@@ -79,12 +79,14 @@ const authAdminLider = async (req: Request, res: Response, next: NextFunction) =
             console.log("42 AuthAL");
             const db = new Database();
             const data = await db.getSpecificSquad(payload.squad);
-            // if(data.leader === payload.id){
-            next();
-            //} else{
-            //caso ele não seja o leader da squad que ele participa
-            //throw new Error();
-            //}
+            console.log("81", data.data);
+            console.log("82", data.data[0].leader);
+            if (data.data[0].leader === payload.id) {
+                next();
+            } else {
+                // caso ele não seja o leader da squad que ele participa
+                throw new Error();
+            }
         }
 
     } catch (error) {

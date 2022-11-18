@@ -7,6 +7,7 @@ dotenv.config();
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid"
+import { Console } from "console";
 
 const secret: string = '222334';
 
@@ -18,11 +19,13 @@ export const registerUser = async (data: Iuser) => {
         new validator.NameValidator(data.first_name);
         new validator.NameValidator(data.last_name);
 
+        const encryptedPasswd: string = await bcrypt.hash(data.password as string, 10);
+
         const dataUser: Iuser = {
             id: uuid(),
             username: data.username,
             email: data.email,
-            password: data.password,
+            password: encryptedPasswd,
             first_name: data.first_name,
             last_name: data.last_name,
             inactive: false,
@@ -56,7 +59,7 @@ export const loginUser = async (data: Iuser) => {
         const response: resp<[Iuser]> = await db.getLogin(emailUser);
 
         if (!response.err) {
-
+            console.log("62", response)
             const user = response.data![0];
 
             const compare = await bcrypt.compare(password as string, user.password as string)

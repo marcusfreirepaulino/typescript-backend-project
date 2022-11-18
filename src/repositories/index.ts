@@ -15,7 +15,7 @@ export class Database {
             const res = await this.orm.selectUnic('users', ['id', 'email', 'password', 'squad', 'is_admin', 'inactive'], { email: _email });
 
             if (res.err) throw res.err;
-            return { err: null, data: res.data.rows };
+            return { err: null, data: res.data };
         } catch (err) {
             return { err: err as Error, data: null };
         }
