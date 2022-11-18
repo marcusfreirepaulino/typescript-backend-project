@@ -10,6 +10,17 @@ export class Database {
     constructor(){}
 
 
+    public async getLogin(_email? : string){
+        try{
+            if(!_email) throw new Error("é necessário um email");
+            const res = await this.orm.selectUnic('users', ['id', 'email', 'password', 'squad', 'is_admin', 'inactive'], {email: _email});
+            if (res.err) throw res.err;
+            return {err: null, data: res.data.rows};
+        }catch(err){
+            return {err: err as Error, data: null};
+        }
+    }
+
     //user/users
     public async getUsers(){
         try{
